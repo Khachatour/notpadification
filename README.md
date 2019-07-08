@@ -7,3 +7,7 @@ A note saving application to write, read, update and delete notes stored in GitH
 ```js
 npm run dev // to start a dev server
 ```
+
+### About the application
+
+At first user

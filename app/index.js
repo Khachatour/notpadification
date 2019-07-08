@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import 'whatwg-fetch'
-import { getAccessToken, getUser } from '../src/api/gists'
-import If from '../src/lib/components/Utils/Conditional'
+
 import App from './main'
+import If from '../src/lib/components/Utils/Conditional'
+import { getAccessToken, getUser } from '../src/api/gists'
+
 const CLIENT_ID = 'a40fa50ade80b6e1979b'
 const REDIRECT_URI = 'http://localhost:1234/'
 
-const Hello = () => {
+const loginStyles = {
+  display: 'flex',
+  width: '100%',
+  height: '100vh',
+  alignItems: 'center',
+  justifyContent: 'center'
+}
+
+const ApplicationEntry = () => {
   const [{ user, isLoggedIn }, setUser] = useState({
     user: null,
     isLoggedIn: false
@@ -30,14 +40,17 @@ const Hello = () => {
       condition={isLoggedIn}
       then={() => <App />}
       otherwise={() => (
-        <a
-          href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=gist&redirect_uri=${REDIRECT_URI}`}
-        >
-          Login
-        </a>
+        <div style={loginStyles}>
+          <a
+            style={{ fontSize: 23 }}
+            href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=gist&redirect_uri=${REDIRECT_URI}`}
+          >
+            Login with your GitHub
+          </a>
+        </div>
       )}
     />
   )
 }
 
-ReactDOM.render(<Hello />, document.getElementById('root'))
+ReactDOM.render(<ApplicationEntry />, document.getElementById('root'))
