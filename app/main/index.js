@@ -38,6 +38,20 @@ const App = () => {
     }
     updateGist(gist.id, newGist).then(setGist)
   }
+
+  const _addGistNote = ({ filename, content }) => {
+    const newGist = {
+      description: gist.description,
+      files: {
+        ...gist.files,
+        [filename]: {
+          content
+        }
+      }
+    }
+    updateGist(gist.id, newGist).then(setGist)
+  }
+
   return (
     <div className="notepadification">
       <Text className="nodepad-title">Notepad Appliction</Text>
@@ -62,7 +76,7 @@ const App = () => {
           </div>
         </div>
         <div className="nodepad-body">
-          <InitialNote />
+          <InitialNote onNoteAdd={_addGistNote} />
         </div>
         <If
           condition={!!gist}

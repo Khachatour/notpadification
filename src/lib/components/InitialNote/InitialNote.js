@@ -9,11 +9,11 @@ const MAX_TITLE_COUNT = 255
 const MAX_NOTE_COUNT = 1000
 const initState = { title: null, note: null }
 
-const InitialNote = () => {
+const InitialNote = ({ onNoteAdd }) => {
   const [title, setTitle] = useState('')
   const [note, setNote] = useState('')
   const [warning, setWarning] = useState(initState)
-  const onAdd = () => {}
+  const onAdd = () => onNoteAdd({ filename: title, content: note })
 
   const checkAndUpdate = (
     text: string,
@@ -21,8 +21,7 @@ const InitialNote = () => {
     maxCount: number,
     setter: (s: string) => void
   ) => {
-    const text = e.target.value
-    if (text.length < MAX_TITLE_COUNT) {
+    if (text.length < maxCount) {
       setter(text)
       setWarning(initState)
     } else {
@@ -33,8 +32,8 @@ const InitialNote = () => {
     }
   }
 
-  const onChangeTitle = (e: Event) =>
-    checkAndUpdate(e.target.value, 'title', MAX_TITLE_COUNT, setTitle)
+  const onChangeTitle = (text: string) =>
+    checkAndUpdate(text, 'title', MAX_TITLE_COUNT, setTitle)
 
   const onChangeNote = (e: Event) =>
     checkAndUpdate(e.target.value, 'note', MAX_NOTE_COUNT, setNote)
