@@ -54,3 +54,11 @@ export const updateGist = (id: string, newGist: any) =>
   http.PATCH(`${API_PREFIX}/gists/${id}`, newGist, {
     Authorization: `token ${window.ACCESS_TOKEN}`
   })
+
+export const deleteGist = (id: string) =>
+  fetch(`${API_PREFIX}/gists/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `token ${window.ACCESS_TOKEN}`
+    }
+  }).then(res => res.text())

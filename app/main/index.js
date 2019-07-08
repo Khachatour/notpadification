@@ -8,12 +8,15 @@ import Input from '../../src/lib/components/Input'
 import Button from '../../src/lib/components/Button'
 import If from '../../src/lib/components/Utils/Conditional'
 import InitialNote from '../../src/lib/components/InitialNote'
-import { createGist, updateGist } from '../../src/api/gists'
+import { createGist, updateGist, deleteGist } from '../../src/api/gists'
 
 const App = () => {
   const [title, setTitle] = useState('')
   const [gist, setGist] = useState(null)
   const onSave = () => createGist(title).then(setGist)
+
+  const onDelete = () => deleteGist(gist.id).then(() => setGist(null))
+
   const onDeleteGist = (key: string) => () => {
     const newGist = {
       description: gist.description,
@@ -53,7 +56,9 @@ const App = () => {
             <Button type="primary" onClick={onSave}>
               Save
             </Button>
-            <Button type="danger">Delete</Button>
+            <Button type="danger" onClick={onDelete}>
+              Delete
+            </Button>
           </div>
         </div>
         <div className="nodepad-body">
