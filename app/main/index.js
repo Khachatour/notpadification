@@ -1,26 +1,36 @@
 /* @flow */
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Text from '../../src/lib/components/Text'
 
 import './index.sass'
-import { omitProp } from '../../src/lib/utils'
-import { createGist } from '../../src/api/gists'
 import Note from '../../src/lib/components/Note'
 import Input from '../../src/lib/components/Input'
 import Button from '../../src/lib/components/Button'
 import If from '../../src/lib/components/Utils/Conditional'
-import { updateGist } from '../../src/api/gists'
+import InitialNote from '../../src/lib/components/InitialNote'
+import { createGist, updateGist } from '../../src/api/gists'
 
 const App = () => {
   const [title, setTitle] = useState('')
   const [gist, setGist] = useState(null)
   const onSave = () => createGist(title).then(setGist)
-  const deleteGist = (key: number) => () => {
+  const onDeleteGist = (key: string) => () => {
     const newGist = {
       description: gist.description,
       files: {
         ...gist.files,
         [key]: null
+      }
+    }
+    updateGist(gist.id, newGist).then(setGist)
+  }
+
+  const onUpdateGist = (key: string) => (newContent: any) => {
+    const newGist = {
+      description: gist.description,
+      files: {
+        ...gist.files,
+        [key]: newContent
       }
     }
     updateGist(gist.id, newGist).then(setGist)
@@ -46,6 +56,9 @@ const App = () => {
             <Button type="danger">Delete</Button>
           </div>
         </div>
+        <div className="nodepad-body">
+          <InitialNote />
+        </div>
         <If
           condition={!!gist}
           then={() => {
@@ -60,7 +73,8 @@ const App = () => {
                       key={idx}
                       note={note}
                       title={title}
-                      deleteGist={deleteGist(key)}
+                      deleteGist={onDeleteGist(key)}
+                      updateGist={onUpdateGist(key)}
                     />
                   )
                 })}

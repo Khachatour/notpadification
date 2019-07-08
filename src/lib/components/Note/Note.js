@@ -9,7 +9,7 @@ type INote = {
   note: string
 }
 
-const Note = ({ title, note, deleteGist }) => {
+const Note = ({ title, note, deleteGist, updateGist }) => {
   const [newTitle, setTitle] = useState(title)
   const [newNote, setNote] = useState(note)
   const _setNote = (e: Event) => {
@@ -19,6 +19,8 @@ const Note = ({ title, note, deleteGist }) => {
     }
   }
 
+  const gistUpdate = () => updateGist({ filename: newTitle, content: newNote })
+
   return (
     <div className="note">
       <div className="note-left">
@@ -26,9 +28,10 @@ const Note = ({ title, note, deleteGist }) => {
           isUnique
           value={newTitle}
           onChange={setTitle}
+          onBlur={gistUpdate}
           placeholder="My notepad title..."
         />
-        <textarea value={newNote} onChange={_setNote} />
+        <textarea value={newNote} onChange={_setNote} onBlur={gistUpdate} />
       </div>
       <div className="note-right">
         <Button type="danger" onClick={deleteGist}>
