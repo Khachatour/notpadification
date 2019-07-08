@@ -2,8 +2,8 @@
 import http from './factory/ApiFactory'
 import { API_PREFIX, USER_ID } from './factory/config'
 
-export const getAllGists = () =>
-  http.GET(`${API_PREFIX}/users/Khachatour/gists`)
+export const getAllGists = token =>
+  http.GET(`${API_PREFIX}/gists`, null, { Authorization: `token ${token}` })
 
 // Github has an issue regarding CORS when accesing `access_token` endpoint
 // for this either we need too make our own server to get the `access_token`
@@ -26,3 +26,6 @@ export const getAccessToken = (code: string) =>
       })
     }
   ).then(res => res.text())
+
+export const getUser = (token: string) =>
+  http.GET(`${API_PREFIX}/user`, null, { Authorization: `token ${token}` })
