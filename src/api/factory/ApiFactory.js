@@ -22,7 +22,7 @@ const __fetch = (method: string) => (
 ) =>
   fetch(path, {
     method,
-    credentials: 'include',
+    // credentials: 'include',
     headers: { ...HEADERS[method], ...extraHeaders },
     ...(!!body ? { body: JSON.stringify(body) } : {})
   })
