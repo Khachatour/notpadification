@@ -49,3 +49,8 @@ export const getGistsById = (id: string) =>
   http.GET(`${API_PREFIX}/gists/${id}`, null, {
     Authorization: `token ${window.ACCESS_TOKEN}`
   })
+
+export const updateGist = (id: string, newGist: any) =>
+  http.PATCH(`${API_PREFIX}/gists/${id}`, newGist, {
+    Authorization: `token ${window.ACCESS_TOKEN}`
+  })

@@ -3,17 +3,28 @@ import React, { useState, useEffect } from 'react'
 import Text from '../../src/lib/components/Text'
 
 import './index.sass'
-import Input from '../../src/lib/components/Input/Input'
-import Button from '../../src/lib/components/Button/Button'
+import { omitProp } from '../../src/lib/utils'
+import { createGist } from '../../src/api/gists'
+import Note from '../../src/lib/components/Note'
+import Input from '../../src/lib/components/Input'
+import Button from '../../src/lib/components/Button'
 import If from '../../src/lib/components/Utils/Conditional'
-
-import { createGist, getGistsById } from '../../src/api/gists'
+import { updateGist } from '../../src/api/gists'
 
 const App = () => {
   const [title, setTitle] = useState('')
   const [gist, setGist] = useState(null)
-  const onSave = () => createGist(title).then(gist => setGist(gist))
-
+  const onSave = () => createGist(title).then(setGist)
+  const deleteGist = (key: number) => () => {
+    const newGist = {
+      description: gist.description,
+      files: {
+        ...gist.files,
+        [key]: null
+      }
+    }
+    updateGist(gist.id, newGist).then(setGist)
+  }
   return (
     <div className="notepadification">
       <Text className="nodepad-title">Notepad Appliction</Text>
@@ -22,7 +33,6 @@ const App = () => {
           <div className="input-container">
             <label htmlFor="notepad_title">Notepad Title</label>
             <Input
-              isUnique
               value={title}
               id="notepad_title"
               onChange={setTitle}
@@ -36,22 +46,22 @@ const App = () => {
             <Button type="danger">Delete</Button>
           </div>
         </div>
-        <div className="nodepad-body">
-          <Text>My Notes</Text>
-          <Input isUnique={false} />
-        </div>
         <If
           condition={!!gist}
           then={() => {
             const notes = Object.keys(gist.files)
             return (
               <div className="nodepad-footer nodepad-gists">
-                {notes.map(key => {
+                {notes.map((key, idx) => {
+                  const note = gist.files[key].content
+                  const title = key
                   return (
-                    <div className="note">
-                      <div>{key}</div>
-                      <div>{gist.files[key].content}</div>
-                    </div>
+                    <Note
+                      key={idx}
+                      note={note}
+                      title={title}
+                      deleteGist={deleteGist(key)}
+                    />
                   )
                 })}
               </div>
