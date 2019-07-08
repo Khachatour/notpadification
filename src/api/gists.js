@@ -29,3 +29,23 @@ export const getAccessToken = (code: string) =>
 
 export const getUser = (token: string) =>
   http.GET(`${API_PREFIX}/user`, null, { Authorization: `token ${token}` })
+
+export const createGist = (title: string) =>
+  http.POST(
+    `${API_PREFIX}/gists`,
+    {
+      description: title,
+      public: true,
+      files: {
+        'mock title': {
+          content: 'mock content'
+        }
+      }
+    },
+    { Authorization: `token ${window.ACCESS_TOKEN}` }
+  )
+
+export const getGistsById = (id: string) =>
+  http.GET(`${API_PREFIX}/gists/${id}`, null, {
+    Authorization: `token ${window.ACCESS_TOKEN}`
+  })
